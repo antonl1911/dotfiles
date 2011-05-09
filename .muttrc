@@ -1,4 +1,5 @@
-
+set beep_new = yes
+set check_new = yes
 set timeout=60
 set mail_check=5
 
@@ -91,7 +92,8 @@ set sort_alias=alias                 # Sort alphabetically
 #======================================================#
 # Colours: defaults are a little bleak so experiment!
 
-source ~/.mutt/mutt_colors            # In their own file 
+# source ~/.mutt/mutt_colors            # In their own file 
+source ~/.mutt/mutt-colors-solarized-dark-16.muttrc
 
 #======================================================#
 # Lists: An example using the mutt-users list:

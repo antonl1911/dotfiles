@@ -1,7 +1,9 @@
+call pathogen#runtime_append_all_bundles() 
 set nocompatible
 let $PAGER=''
 :set t_Co=256
-:colo jellyx
+":colo jellyx
+:colo solarized
 :set tabstop=4
 :set shiftwidth=4
 :set smarttab
@@ -26,4 +28,3 @@ function! SetCursorPosition()
 	end
 endfunction
 
-call pathogen#runtime_append_all_bundles() 

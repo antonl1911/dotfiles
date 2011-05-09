@@ -162,9 +162,14 @@ add_binds("normal", {
     -- Yanking
     buf("^yy$",                     function (w)
                                         local uri = string.gsub(w:get_current().uri or "", " ", "%%20")
-                                        w:set_selection(uri)
+                                        luakit.set_selection(uri)
+                                        w:notify("Yanked uri: " .. uri)
                                     end),
-    buf("^yt$",                     function (w) w:set_selection(w.win.title) end),
+
+    buf("^yt$",                     function (w)
+                                        luakit.set_selection(w.win.title)
+                                        w:notify("Yanked title: " .. w.win.title)
+                                    end),
 
     -- Commands
     key({"Control"}, "a",           function (w)    w:navigate(w:inc_uri(1)) end),
@@ -194,8 +199,8 @@ add_binds("normal", {
     buf("^gT$",                     function (w, b, m) w:prev_tab(m.count) end, {count=1}),
     buf("^gt$",                     function (w, b, m) if not w:goto_tab(m.count) then w:next_tab() end end, {count=0}),
 
-    key({"Control"}, "t",           function (w)    w:new_tab() end),
-    key({}, "n",                    function (w)    w:new_tab("luakit://bookmarks") end),
+    key({"Control"}, "t",           function (w)    w:new_tab(homepage) end),
+    key({}, "n",                    function (w)    w:new_tab(homepage) end),
     key({"Control"}, "w",           function (w)    w:close_tab()       end),
     key({},          "d",           function (w, m) for i=1,m.count do w:close_tab()      end end, {count=1}),
 
