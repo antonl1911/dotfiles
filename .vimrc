@@ -8,7 +8,9 @@ let $PAGER=''
 :set shiftwidth=4
 :set smarttab
 :set cursorline
-
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
 filetype plugin on
 filetype indent on
 

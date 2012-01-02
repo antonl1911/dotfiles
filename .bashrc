@@ -14,6 +14,7 @@ if [[ $- != *i* ]] ; then
 	return
 fi
 
+
 # Enable colors for ls, etc.  Prefer ~/.dir_colors #64489
 if [[ -f ~/.dir_colors ]]; then
 	eval `dircolors -b ~/.dir_colors`
@@ -49,4 +50,6 @@ export PROMPT_COMMAND="echo -ne '\a'"
 set -o vi
 export PAGER=~/bin/vimpager 
 export MANPAGER=/usr/bin/vimmanpager
+export MPD_HOST="192.168.1.3"
 alias less=$PAGER
+irexec &
