@@ -1,5 +1,6 @@
 call pathogen#runtime_append_all_bundles() 
 set nocompatible
+:au BufNewFile * silent! 0r  ~/.vim/templates/%:e.tpl
 let $PAGER=''
 :set t_Co=256
 ":colo jellyx
