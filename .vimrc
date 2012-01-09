@@ -1,5 +1,6 @@
 call pathogen#runtime_append_all_bundles() 
 set nocompatible
+set dictionary+=/usr/share/dict/words
 :au BufNewFile * silent! 0r  ~/.vim/templates/%:e.tpl
 let $PAGER=''
 :set t_Co=256

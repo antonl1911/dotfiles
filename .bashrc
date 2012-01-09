@@ -39,7 +39,7 @@ if [ -f /usr/share/mc/mc.gentoo ]; then
   	. /usr/share/mc/mc.gentoo
 fi
 
-source ~/.bash_aliases
+source ~/.shell_aliases
 
 source ~/.bash_local
 # Sets the Mail Environment Variable

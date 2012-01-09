@@ -57,7 +57,7 @@ layouts =
 
 -- {{{ Tags
  tags = {
-   names  = { "☠", "www", "msg", "media", 5 ,6, 7, 8},
+   names  = { "vim", "www", "msg", "media", 5 ,6, 7, 8},
    layout = { layouts[2], layouts[10], layouts[3], layouts[3], layouts[2],
               layouts[2], layouts[2], layouts[2]
  }}
