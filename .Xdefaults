@@ -9,15 +9,25 @@ urxvt*urgentOnBell:       true
 !urxvt*internalBorder:       0
 !urxvt*externalBorder:       0
 !urxvt*font:        -xos4-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
-urxvt*font:       xft:Liberation Mono:14:antialias=false
+urxvt*font:       xft:Liberation Mono:pixelsize=12:antialias=false
+urxvt*boldfont:       xft:Liberation Mono:pixelsize=12:antialias=false
 XTerm*faceName: Terminus
-XTerm*faceSize: 14
+XTerm*faceSize: 10
 ! Extensions
 urxvt*perl-lib:        /usr/lib/urxvt/perl/
 urxvt*perl-ext-common: default,matcher,searchable-scrollback
 urxvt*urlLauncher:     /usr/bin/luakit
 urxvt*matcher.button:  1
 !  - catch ugly URLs
-!!urxvt.cutchars:        `()'*<>[]{|}"'
+urxvt.cutchars:        `()'*<>[]{|}"'
+Xft*hintstyle: hintslight
 
-
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintfull
+Xft.hinting: 1
+Xft.antialias: 1
+Xft.dpi: 99
+Xft.rgba: rgb
+URxvt.keysym.M-C-1: command:\033]710;suxuseuro\007\033]711;suxuseuro\007
+URxvt.keysym.M-C-2: command:\033]710;9x15bold\007\033]711;9x15bold\007

@@ -1,17 +1,18 @@
 -- Standard awesome library
-require("awful")
+awful = require("awful")
 require("awful.autofocus")
 require("awful.rules")
+wibox = require ("wibox")
 -- Theme handling library
-require("beautiful")
+beautiful = require("beautiful")
 -- Notification library
-require("naughty")
-require("vicious")
-require("weather")
-require("awesompd")
+naughty = require("naughty")
+vicious = require("vicious")
+-- require("weather")
+-- require("awesompd")
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("/usr/share/awesome/themes/default/theme.lua")
+-- beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvt"
@@ -56,15 +57,16 @@ layouts =
 
 
 -- {{{ Tags
- tags = {
-   names  = { "vim", "www", "msg", "media", 5 ,6, 7, 8},
-   layout = { layouts[2], layouts[10], layouts[3], layouts[3], layouts[2],
-              layouts[2], layouts[2], layouts[2]
- }}
+--  tags = {
+--    names  = { "vim", "www", "msg", "media", 5 ,6, 7, 8},
+--    layout = { layouts[2], layouts[10], layouts[3], layouts[3], layouts[2],
+--               layouts[2], layouts[2], layouts[2]
+--  }}
+
  
- for s = 1, screen.count() do
-     tags[s] = awful.tag(tags.names, s, tags.layout)
- end
+--  for s = 1, screen.count() do
+--      tags[s] = awful.tag(tags.names, s, tags.layout)
+--  end
 -- }}}
 
 
@@ -85,54 +87,56 @@ mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesom
                                   }
                         })
 
-mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
-                                     menu = mymainmenu })
+-- mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
+--                                      menu = mymainmenu })
 -- }}}
 
 -- {{{ Wibox
 -- Create a textclock widget
 
-musicwidget = awesompd:create() -- Create awesompd widget
-musicwidget.font = "Liberation Mono" -- Set widget font 
-musicwidget.scrolling = true -- If true, the text in the widget will be scrolled
-musicwidget.output_size = 30 -- Set the size of widget in symbols
-musicwidget.update_interval = 10 -- Set the update interval in seconds
-musicwidget.path_to_icons = "/home/x/.config/awesome/icons" -- Set the folder where icons are located (change username to your login name)
+-- musicwidget = awesompd:create() -- Create awesompd widget
+-- musicwidget.font = "Liberation Mono" -- Set widget font 
+-- musicwidget.scrolling = true -- If true, the text in the widget will be scrolled
+-- musicwidget.output_size = 30 -- Set the size of widget in symbols
+-- musicwidget.update_interval = 10 -- Set the update interval in seconds
+-- musicwidget.path_to_icons = "/home/x/.config/awesome/icons" -- Set the folder where icons are located (change username to your login name)
 -- Set all the servers to work with (here can be any servers you use)
-musicwidget.servers = {
- { server = "localhost",
-	  port = 6600 },
-}
+-- musicwidget.servers = {
+--  { server = "192.168.1.3",
+-- 	  port = 6600 },
+-- }
 -- Set the buttons of the widget
-musicwidget:register_buttons({ { "", awesompd.MOUSE_LEFT, musicwidget:command_toggle() },
-				   { "Control", awesompd.MOUSE_SCROLL_UP, musicwidget:command_prev_track() },
-			   { "Control", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_next_track() },
-			   { "", awesompd.MOUSE_SCROLL_UP, musicwidget:command_volume_up() },
-			   { "", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_volume_down() },
-			   { "", awesompd.MOUSE_RIGHT, musicwidget:command_show_menu() } })
-musicwidget:run()
+-- musicwidget:register_buttons({ { "", awesompd.MOUSE_LEFT, musicwidget:command_toggle() },
+-- 				   { "Control", awesompd.MOUSE_SCROLL_UP, musicwidget:command_prev_track() },
+-- 			   { "Control", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_next_track() },
+-- 			   { "", awesompd.MOUSE_SCROLL_UP, musicwidget:command_volume_up() },
+-- 			   { "", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_volume_down() },
+-- 			   { "", awesompd.MOUSE_SCROLL_DOWN, musicwidget:command_volume_down() },
+-- 			   { "", awesompd.MOUSE_RIGHT, musicwidget:command_show_menu() } })
+-- musicwidget:run()
 
 
 
 
-mytextclock = awful.widget.textclock({ align = "right" })
-weatherwidget = widget({ type = "textbox" })
-cpuwidget = widget({ type = "textbox" })
+mytextclock = awful.widget.textclock()
+-- weatherwidget = widget({ type = "textbox" })
+cpuwidget = wibox.widget.textbox()
 -- cpuwidget.text = "Hello, world!"
-weatherpic = widget({ type = "imagebox" })
+-- weatherpic = widget({ type = "imagebox" })
 -- {{{ Reusable separator
-separator = widget({ type = "textbox" })
+separator = wibox.widget.textbox()
 separator.text = "::";
 --separator.image = image(beautiful.widget_sep)
 -- }}}
 
 -- {{{ CPU usage and temperature
-cpuicon = widget({ type = "imagebox" })
-cpuicon.image = image(beautiful.widget_cpu)
+cpuicon = wibox.widget.imagebox()
+cpuicon:set_image(beautiful.widget_cpu)
 -- Initialize widgets
 -- cpugraph  = awful.widget.graph()
-tzswidget = widget({ type = "textbox" })
-fanwidget = widget({ type = "textbox" })
+tzswidget = wibox.widget.textbox()
+fanwidget1 = wibox.widget.textbox()
+fanwidget2 = wibox.widget.textbox()
 -- Graph properties
 -- cpugraph:set_width(40):set_height(14)
 -- cpugraph:set_background_color(beautiful.fg_off_widget)
@@ -143,14 +147,15 @@ fanwidget = widget({ type = "textbox" })
 -- vicious.register(mpdwidget, vicious.widgets.mpd, " $1", 5, { 30, "mpd" })
 
 -- vicious.register(cpugraph,  vicious.widgets.cpu,      "$1")
-vicious.register(tzswidget, vicious.widgets.thermal, "CPU $1°C", 20, {"coretemp.0", "core"})
-vicious.register(fanwidget, vicious.widgets.thermal, "Fan $1RPM", 20, {"f71882fg.2560", "fan"})
+vicious.register(tzswidget, vicious.widgets.thermal, "CPU $1°C", 10, {"0000:00:18.3", "k10temp"})
+vicious.register(fanwidget1, vicious.widgets.thermal, "Fan $1RPM", 10, {"it87.656", "fan1"})
+vicious.register(fanwidget2, vicious.widgets.thermal, "Fan $1RPM", 10, {"it87.656", "fan2"})
 -- }}}
-weather.addWeather(weatherwidget, "dolgoprudniy", 600)
-weather.addWeather(weatherpic, "dolgoprudniy", 600)
+-- weather.addWeather(weatherwidget, "dolgoprudniy", 600)
+-- weather.addWeather(weatherpic, "dolgoprudniy", 600)
 
 -- Create a systray
-mysystray = widget({ type = "systray" })
+-- mysystray = wibox.widget.systray()
 
 -- Create a wibox for each screen and add it
 mywibox = {}
@@ -193,7 +198,7 @@ mytasklist.buttons = awful.util.table.join(
 
 for s = 1, screen.count() do
     -- Create a promptbox for each screen
-    mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
+--      mypromptbox[s] = awful.widget.prompt({ layout = awful.widget.layout.horizontal.leftright })
     -- Create an imagebox widget which will contains an icon indicating which layout we're using.
     -- We need one layoutbox per screen.
     mylayoutbox[s] = awful.widget.layoutbox(s)
@@ -203,12 +208,10 @@ for s = 1, screen.count() do
                            awful.button({ }, 4, function () awful.layout.inc(layouts, 1) end),
                            awful.button({ }, 5, function () awful.layout.inc(layouts, -1) end)))
     -- Create a taglist widget
-    mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
+--     mytaglist[s] = awful.widget.taglist(s, awful.widget.taglist.label.all, mytaglist.buttons)
 
     -- Create a tasklist widget
-    mytasklist[s] = awful.widget.tasklist(function(c)
-                                              return awful.widget.tasklist.label.currenttags(c, s)
-                                          end, mytasklist.buttons)
+    mytasklist[s] = awful.widget.tasklist(s, awful.widget.tasklist.filter.currenttags, mytasklist.buttons)
 
     -- Create the wibox
     mywibox[s] = awful.wibox({ position = "top", screen = s })
@@ -217,15 +220,15 @@ for s = 1, screen.count() do
         {
             mylauncher,
             mytaglist[s],
-            mypromptbox[s],
-            layout = awful.widget.layout.horizontal.leftright
+--             mypromptbox[s],
+--             layout = awful.widget.layout.horizontal.leftright
         },
         mylayoutbox[s],
         mytextclock, separator,
-		weatherpic, weatherwidget, separator,
+--		weatherpic, weatherwidget, separator,
         s == 1 and mysystray or nil,
-		separator, musicwidget.widget,
-		separator, tzswidget, separator, fanwidget, cpuwidget, cpuicon,
+-- 		separator, musicwidget.widget,
+		separator, tzswidget, separator,fanwidget2, separator ,fanwidget1, cpuwidget, cpuicon,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -240,12 +243,20 @@ root.buttons(awful.util.table.join(
 ))
 -- }}}
 
+  myhost = "192.168.1.104";
+-- myhost = "localhost";
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
+	awful.key({ modkey,   		  }, "F10", function () awful.util.spawn_with_shell("mplayer2 $(youtube-dl -g `xclip -o`)") end),
 	awful.key({ modkey,   		  }, "F12", function () awful.util.spawn("xlock") end),
-	awful.key({ modkey, "Shift"	  }, "p", function () awful.util.spawn("mpc -h localhost toggle") end),
-	awful.key({ modkey,		 	  }, "-", function () awful.util.spawn("mpc -h localhost volume -10") end),
-	awful.key({ modkey, 	  	  }, "=", function () awful.util.spawn("mpc -h localhost volume +10") end),
+	awful.key({ modkey, "Shift"	  }, "p", function () awful.util.spawn(string.format("mpc -h %s toggle", myhost)) end),
+-- 	awful.key({ "XF86AudioPlay",	  }, function () awful.util.spawn(string.format("mpc -h %s toggle", myhost)) end),
+	awful.key({ modkey,		 	  }, "-", function () awful.util.spawn(string.format("mpc -h %s volume -10", myhost)) end),
+-- 	awful.key({ "XF86AudioLowerVolume"		 	  }, function () awful.util.spawn(string.format("mpc -h %s volume -10", myhost)) end),
+	awful.key({ modkey, 	  	  }, "=", function () awful.util.spawn(string.format("mpc -h %s volume +10", myhost)) end),
+-- 	awful.key({"XF86AudioRaiseVolume"  	  	  }, function () awful.util.spawn(string.format("mpc -h %s volume +10", myhost)) end),
+-- 	awful.key({"XF86AudioNext"  	  	  }, function () awful.util.spawn(string.format("mpc next", myhost)) end),
+-- 	awful.key({"XF86AudioPrev"  	  	  }, function () awful.util.spawn(string.format("mpc prev", myhost)) end),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev       ),
     awful.key({ modkey,           }, "Right",  awful.tag.viewnext       ),
     awful.key({ modkey,           }, "Escape", awful.tag.history.restore),

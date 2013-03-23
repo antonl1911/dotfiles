@@ -1,5 +1,5 @@
 alias g="git"
-alias emerge="sudo emerge"
+alias emerge="sudo ionice -c 3 emerge"
 alias nplayer="mplayer -vo vdpau -vc ffh264vdpau"
 alias temerge="sudo /usr/local/bin/temerge"
 alias mount="sudo mount"
