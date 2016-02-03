@@ -1,0 +1,13 @@
+export PATH=/usr/lib/ccache/bin:$PATH
+export MAIL=~/mail/inbox
+export EDITOR=/usr/bin/vim
+export PROMPT_COMMAND="echo -ne '\a'"
+export PAGER=~/bin/vimpager 
+export MANPAGER=/usr/share/vim/vim74/macros/manpager.sh
+#export MPD_HOST="192.168.1.104"
+export MPD_HOST="localhost"
+export http_proxy="127.0.0.1:8118"
+export HTTP_PROXY="127.0.0.1:8118"
+#export HTTP_PROXY=http://192.168.1.1:8118
+#export http_proxy=http://192.168.1.1:8118
+export ENCAOPT="-L ru"

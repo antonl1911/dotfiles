@@ -1,0 +1,4 @@
+#!/bin/sh
+pushd ~/Private/server/pseudo-server-local
+php ./start.php
+popd

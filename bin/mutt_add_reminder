@@ -1,0 +1,159 @@
+#!/bin/sh
+# @(#) mutt_add_reminder $Revision:$
+
+#   mutt_add_reminder - create a reminder from an e-mail message
+#   Copyright (C) 2007-2011 Gary A. Johnson
+#
+#   This program is free software; you can redistribute it and/or modify
+#   it under the terms of the GNU General Public License as published by
+#   the Free Software Foundation; either version 2 of the License, or
+#   (at your option) any later version.
+#
+#   This program is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#   GNU General Public License for more details.
+#
+#   You should have received a copy of the GNU General Public License
+#   along with this program; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+
+# SYNOPSIS
+#	mutt_add_reminder [file]
+#
+# DESCRIPTION
+#	mutt_add_reminder reads an Outlook calendar event message from stdin
+#	or from the specified file, generates a remind event, and appends that
+#	remind even to the user's ~/.reminders file.  It then launches Vim on
+#	the ~/.reminders file and the original message in split windows to
+#	allow the user to edit the reminder while looking at the original
+#	message.
+#
+#	mutt_add_reminder is intended to be launched by the following macro.
+#
+#           macro index,pager ,r ":unset wait_key; set pipe_decode\n|mutt_add_reminder\n:set wait_key; unset pipe_decode\n" "record a reminder"
+#
+# AUTHOR
+#	Gary A. Johnson
+#	<gjohnson AT spocom DOT com>
+
+prog=${0##*/}
+reminders=$HOME/.reminders
+
+# Create a temporary directory for the temporary file.
+#
+# This is more secure than creating a temporary file in an existing
+# directory.
+
+tmpdir=/tmp/$LOGNAME$$
+umask 077
+mkdir "$tmpdir" || exit 1
+tmpfile="$tmpdir/mail"
+
+cat "$@" | tee "$tmpfile" |
+perl -e '
+    while (<>) {
+	chomp;
+     if (/^SUMMARY;LANGUAGE=ru-RU:(.*)/) {
+	    $what = $1;
+	}
+	# Exchange 2010 ugly format
+     #
+     #
+     if (/^DTSTART;TZID=Russian Standard Time:(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/) {
+         $year = "$1";
+         $month = "$2";
+         $day = "$3";
+         $start_hour = "$4";
+         $start_min = "$5";
+         $sec = "$6";
+	    #$day = "$1 $2";
+	    #if ($3 == 12) {
+		#$hour = 0;
+	    #}
+	    #else {
+		#$hour = $3;
+	    #}
+	    #if ($5 eq "PM") {
+		#$hour = $hour + 12;
+	    #}
+	    #$start = "$hour:$4";
+	    #$start_min = 60 * $hour + $4;
+	    #if ($6 == 12) {
+		#$hour = 0;
+	    #}
+	    #else {
+		#$hour = $6;
+	    #}
+	    #$end_min = 60 * $hour + $7;
+	    #$duration_min = $end_min - $start_min;
+	    #if ($duration_min < 0) {
+		#$duration_min += 24 * 60;
+	    #}
+	    #$duration = sprintf("%d:%0.2d", $duration_min/60, $duration_min%60);
+         # $when = "$day AT $start \+10 \*5 DURATION $duration";
+         
+         # $when = "$date/$month/$year at $hour:$min:$sec"
+	}
+     if (/^DTEND;TZID=Russian Standard Time:(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/) {
+         $end_hour = "$4";
+         $end_min = "$5";
+     }
+     my @month_name = qw(Jan Feb Mar Apr May Jun Jul Aug Sept Oct Nov Dec);
+     $duration_hour = $end_hour - $start_hour;
+	$duration_min = $end_min - $start_min;
+     if ($duration_min < 0) {
+          $duration_hour = $duration_hour - 1;
+          $duration_min = 60 + $duration_min;
+     }
+     $duration = sprintf("%d:%0.2d", $duration_hour, $duration_min);
+     $when = "$day $month_name[$month-1] AT $start_hour:$start_min \+10 \*5 DURATION $duration";
+
+
+
+	# Examples of recurring events:
+	# When: Occurs every Thursday effective 10/4/2007 from 10:00 AM to 11:00 AM (GMT-08:00) Pacific Time (US & Canada).
+	# When: Occurs every Tuesday effective 5/30/2006 from 12:00 PM to 1:00 PM (GMT-08:00) Pacific Time (US & Canada); Tijuana.
+	#
+	if (/^When: Occurs every (\w+) effective (\d+)\/(\d+)\/(\d+) from (\d+):(\d+) ([AP]M) to (\d+):(\d+) ([AP]M)/) {
+	    $month = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")[$2 - 1];
+	    if ($5 == 12) {
+		$hour = 0;
+	    }
+	    else {
+		$hour = $5;
+	    }
+	    if ($7 eq "PM") {
+		$hour = $hour + 12;
+	    }
+	    $start = "$hour:$6";
+	    $start_min = 60 * $hour + $6;
+	    if ($8 == 12) {
+		$hour = 0;
+	    }
+	    else {
+		$hour = $8;
+	    }
+	    if ($10 eq "PM") {
+		$hour = $hour + 12;
+	    }
+	    $end_min = 60 * $hour + $9;
+	    $duration_min = $end_min - $start_min;
+	    if ($duration_min < 0) {
+		$duration_min += 24 * 60;
+	    }
+	    $duration = sprintf("%d:%0.2d", $duration_min/60, $duration_min%60);
+	    $when = "$1 $3 $month $4 \*7 SKIP AT $start \+10 \*5 DURATION $duration";
+	}
+
+     if (/^LOCATION;LANGUAGE=ru-RU:(.*)/) {
+	    $where = $1;
+	}
+    }
+    print "\nREM $when MSG %\"$what%\" %2 -- $where\n";
+    ' >> "$reminders"
+
+# Exit vim with ":wqa".
+vim -o -c 'normal }zt' -c 'wincmd b' + "$tmpfile" "$reminders" < /dev/tty
+rm -f "$tmpfile"
+rmdir "$tmpdir"

@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "autospawn = yes" > ~/.pulse/client.conf
+#skypetab-ng
+skype
+echo "autospawn = no" > ~/.pulse/client.conf
+pulseaudio --kill

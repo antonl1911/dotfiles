@@ -1,0 +1,7 @@
+clear Mod4
+clear Mod1
+add Mod1 = Alt_R
+add Mod4 = Alt_L
+add Lock = Super_L
+keycode 72 = XF86MonBrightnessDown NoSymbol XF86MonBrightnessDown
+keycode 73 = XF86MonBrightnessUp NoSymbol XF86MonBrightnessUp

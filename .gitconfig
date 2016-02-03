@@ -1,0 +1,44 @@
+
+[color]
+	ui = auto
+	branch = auto
+	diff = auto
+	status = auto
+[pack]
+	threads = 0
+[diff]
+	renamelimit = 0
+	color = auto
+[color "branch"]
+  	current = yellow reverse
+  	local = yellow
+  	remote = green
+
+[color "diff"]
+  	meta = yellow bold
+  	frag = magenta bold
+  	old = red bold
+  	new = green bold
+
+[color "status"]
+  	added = yellow
+  	changed = green
+  	untracked = cyan	
+[user]
+	name = A.Leschenko
+	email = antonl1911@gmail.com
+[alias]
+	df = diff
+	st = status
+	com = commit
+	ci = commit
+[core]
+	pager = /home/x/bin/vimpager
+[merge]
+	tool = vimdiff
+[credential]
+	helper = cache
+[pager]
+	diff = false
+[push]
+	default = simple
