@@ -1,0 +1,4 @@
+urxvt*font:   xft:Cousine:pixelsize=12:Regular
+urxvt*boldFont:   xft:Cousine:pixelsize=12:Bold
+urxvt*italicFont:   xft:Cousine:pixelsize=12:Italic
+Xft.dpi: 94
