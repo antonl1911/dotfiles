@@ -1,131 +1,137 @@
-"call pathogen#runtime_append_all_bundles() 
+call pathogen#infect()
 set nocompatible
+set number
+set ruler
+set hlsearch
 set dictionary+=/usr/share/dict/words
 :au BufNewFile * silent! 0r  ~/.vim/templates/%:e.tpl
-augroup template-plugin
-    autocmd User plugin-template-loaded call s:template_keywords()
-augroup END
-
-function! s:template_keywords()
-    if search('<+FILE_NAME+>')
-        silent %s/<+FILE_NAME+>/\=toupper(expand('%:t:r'))/g
-    endif
-    if search('<+CURSOR+>')
-        execute 'normal! "_da>'
-    endif
-    silent %s/<+DATE+>/\=strftime('%Y-%m-%d')/g
-endfunction
 let $PAGER=''
-:set t_Co=256
+let g:signify_vcs_list = [ 'git', 'svn' ]
+let g:vc_browse_cache_all = 1
+let g:startify_custom_header =
+      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
+set t_Co=256
 ":colo jellyx
-:colo xoria256
-":colo solarized
-:set tabstop=4
-:set shiftwidth=4
-:set smarttab
-:set cursorline
-:set number
+"colo solarized
+colo xoria256
+
+set smarttab
+set smartindent
+set cursorline
+
+set ff=dos
+set switchbuf=usetab
+nnoremap <F8> :sbnext<CR>
+nnoremap <F9> :QuickRun<CR>
+nnoremap <S-F8> :sbprevious<CR>
 nnoremap <F2> :set invpaste paste?<CR>
+nnoremap <C-Left> :tabprevious<CR>
+nnoremap <C-Right> :tabnext<CR>
+map <C-n> :NERDTreeToggle<CR>
+":inoremap <c-s> <Esc>:Update<CR>
+:nnoremap <F5> :buffers<CR>:buffer<Space>
 set pastetoggle=<F2>
 set showmode
-filetype plugin on
-filetype indent on
-set wildchar=<Tab> wildmenu wildmode=full
-set wildcharm=<C-Z>
-nnoremap <F10> :b <C-Z>
-nnoremap <F5> :buffers<CR>:buffer<Space>
-" Buffers - explore/next/previous: Alt-F12, F12, Shift-F12.
-nnoremap <silent> <M-F12> :BufExplorer<CR>
-nnoremap <silent> <F12> :bn<CR>
-nnoremap <silent> <S-F12> :bp<CR>
-"turn on syntax highlighting
+filetype off
 syntax on
-" Быстрый вызов команды `set list!` - \l
+filetype plugin indent on
+
+" Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
-" Настраиваем отображения скрытых символов, при включении их отображения:
-" tab - два символа для отображения табуляции (первый символ и заполнитель)
-" eol - символ для отображения конца строки
-" precedes - индикатор продолжения строки в лево
-" extends - индикатор продолжения строки в право
-set listchars=tab:>·,eol:¬,precedes:«,extends:»
+nmap <leader>t :set expandtab<CR>:retab<CR>
+"
+" Shortcut to switch between win and linux style
+" nmae <leader>p :set shiftwidth=
+" " Use the same symbols as TextMate for tabstops and EOLs
+set listchars=tab:▸\ ,eol:¬
+
+"turn on syntax highlighting
 set wildmode=longest,list,full
 set wildmenu
 "jump to last cursor position when opening a file
 ""dont do it when writing a commit log entry
 autocmd BufReadPost * call SetCursorPosition()
 function! SetCursorPosition()
-	if &filetype !~ 'svn\|commit\c'
-		if line("'\"") > 0 && line("'\"") <= line("$")
-			exe "normal! g`\""
-			normal! zz
-		endif
-	end
+        if &filetype !~ 'svn\|commit\c'
+                if line("'\"") > 0 && line("'\"") <= line("$")
+                        exe "normal! g`\""
+                        normal! zz
+                endif
+        end
 endfunction
 
-fun! ReadMan()
-  " Assign current word under cursor to a script variable:
-  let s:man_word = expand('<cword>')
-  " Open a new window:
-  :exe ":wincmd n"
-  " Read in the manpage for man_word (col -b is for formatting):
-  :exe ":r!man " . s:man_word . " | col -b"
-  " Goto first line...
-  :exe ":goto"
-  " and delete it:
-  :exe ":delete"
-  " finally set file type to 'man':
-  " :exe ":set filetype=man"
-endfun
-" Map the K key to the ReadMan function:
-map K :call ReadMan()<CR>
+" If the current buffer has never been saved, it will have no name,
+" call the file browser to save it, otherwise just save it.
+command -nargs=0 -bar Update if &modified 
+                           \|    if empty(bufname('%'))
+                           \|        browse confirm write
+                           \|    else
+                           \|        confirm write
+                           \|    endif
+                           \|endif
+nnoremap <silent> <C-S> :<C-u>Update<CR>
 
-let $GROFF_NO_SGR=1
-
-
-" новая вкладка
-nnoremap <C-T> :tabnew<CR>
-inoremap <C-T> <C-O>:tabnew<CR>
-vnoremap <C-T> <ESC>:tabnew<CR>
-" предыдущая вкладка
-nnoremap <silent><A-LEFT> gT
-inoremap <silent><A-LEFT> <C-O>gT
-vnoremap <silent><A-LEFT> <ESC>gT
-" следующая вкладка
-nnoremap <silent><A-RIGHT> gt
-inoremap <silent><A-RIGHT> <C-O>gt
-vnoremap <silent><A-RIGHT> <ESC>gt
-" Переключение буфера
-noremap <C-left> :bprev<CR>
-noremap <C-right> :bnext<CR> 
-
-"nnoremap <C-Left> :tabprevious<CR>
-"nnoremap <C-PageDown> :tabprevious<CR>
-"nnoremap <C-Right> :tabnext<CR>
-"nnoremap <C-PageUp> :tabnext<CR>
-"nnoremap <silent> <A-Left> :execute 'silent! tabmove ' . (tabpagenr()-2)<CR>
-"nnoremap <silent> <A-Right> :execute 'silent! tabmove ' . tabpagenr()<CR>
-let notabs = 1
-
-nnoremap <silent> <F8> :let notabs=!notabs<Bar>:if notabs<Bar>:tabo<Bar>:else<Bar>:tab ball<Bar>:tabn<Bar>:endif<CR>
-"set wildmenu
-"set wcm=<Tab>
-"menu Encoding.koi8-r   :e ++enc=koi8-r<CR>
-"menu Encoding.windows-1251 :e ++enc=cp1251<CR>
-"menu Encoding.ibm-866      :e ++enc=ibm866<CR>
-"menu Encoding.utf-8                :e ++enc=utf-8 <CR>
-"map <F6> :emenu Encoding.<TAB>
-"nnoremap <silent> <F3> ++enc=cp1251<CR>
-set statusline=%<%f%h%m%r%=format=%{&fileformat}\ file=%{&fileencoding}\ enc=%{&encoding}\ %b\ 0x%B\ %l,%c%V\ %P
-set laststatus=2
-
-let g:enc_index = 0
-function! ChangeFileencoding()
-  let encodings = ['cp1251', 'koi8-r', 'cp866', 'utf-8']
-  execute 'e ++enc='.encodings[g:enc_index].' %:p'
-  if g:enc_index >=3
-	  let g:enc_index = 0
+" virtual tabstops using spaces
+let my_tab=8
+execute "set shiftwidth=".my_tab
+execute "set softtabstop=".my_tab
+" allow toggling between local and default mode
+function! TabToggle()
+  if &shiftwidth == g:my_tab
+    set shiftwidth=4
+    set softtabstop=4
   else
-	  let g:enc_index = g:enc_index + 1
+    execute "set shiftwidth=".g:my_tab
+    execute "set softtabstop=".g:my_tab
   endif
-endf
-nmap <F3> :call ChangeFileencoding()<CR>
+endfunction
+nmap <F10> mz:execute TabToggle()<CR>'z
+
+
+
+set tabstop=8 shiftwidth=8 softtabstop=8 expandtab
+set expandtab
+
+
+"=====================================================
+" Python-mode settings
+"=====================================================
+" отключаем автокомплит по коду (у нас вместо него используется jedi-vim)
+let g:pymode_rope = 0
+let g:pymode_rope_completion = 0
+let g:pymode_rope_complete_on_dot = 0
+" проверка кода
+let g:pymode_lint = 1
+let g:pymode_lint_checker = "pyflakes,pep8"
+let g:pymode_lint_ignore="E501,W601,C0110"
+" провека кода после сохранения
+let g:pymode_lint_write = 0
+
+" поддержка virtualenv
+let g:pymode_virtualenv = 1
+
+" установка breakpoints
+let g:pymode_breakpoint = 1
+let g:pymode_breakpoint_key = '<leader>b'
+
+" подстветка синтаксиса
+let g:pymode_syntax = 1
+let g:pymode_syntax_all = 1
+let g:pymode_syntax_indent_errors = g:pymode_syntax_all
+let g:pymode_syntax_space_errors = g:pymode_syntax_all
+
+" отключить autofold по коду
+let g:pymode_folding = 0
+
+
+"=====================================================
+" Languages support
+"=====================================================
+" --- Python ---
+autocmd FileType python set completeopt-=preview " раскомментируйте, в случае, если не надо, чтобы jedi-vim показывал документацию по методу/классу
+autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
+\ formatoptions+=croq softtabstop=4 smartindent
+\ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+autocmd FileType pyrex setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
+" Disable choose first function/method at autocomplete
+let g:jedi#popup_select_first = 0

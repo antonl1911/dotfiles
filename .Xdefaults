@@ -1,33 +1,38 @@
 urxvt*termName:  xterm-256color
 urxvt*scrollBar:         false
 urxvt*secondaryScroll:    true
-urxvt*saveLines:         65535
 urxvt*cursorBlink:        true
 urxvt*urgentOnBell:       true
-!urxvt*override-redirect:false
-!urxvt*borderLess:       false
-!urxvt*internalBorder:       0
-!urxvt*externalBorder:       0
-!urxvt*font:        -xos4-terminus-medium-*-*-*-14-*-*-*-*-*-*-*
-urxvt*font:       xft:Liberation Mono:pixelsize=12:antialias=false
-urxvt*boldfont:       xft:Liberation Mono:pixelsize=12:antialias=false
-XTerm*faceName: Terminus
+XTerm*faceName: Cousine
 XTerm*faceSize: 10
 ! Extensions
 urxvt*perl-lib:        /usr/lib/urxvt/perl/
-urxvt*perl-ext-common: default,matcher,searchable-scrollback
-urxvt*urlLauncher:     /usr/bin/luakit
+urxvt*perl-ext-common: default,searchable-scrollback,font-size,url-select
+urxvt*urlLauncher:     /usr/bin/chromium
+URxvt.url-select.launcher: /usr/bin/xdg-open
+URxvt.url-select.underline: true
 urxvt*matcher.button:  1
 !  - catch ugly URLs
 urxvt.cutchars:        `()'*<>[]{|}"'
-Xft*hintstyle: hintslight
+URxvt*iso14755: False
 
 Xft.autohint: 0
 Xft.lcdfilter: lcddefault
 Xft.hintstyle: hintfull
 Xft.hinting: 1
 Xft.antialias: 1
-Xft.dpi: 99
 Xft.rgba: rgb
 URxvt.keysym.M-C-1: command:\033]710;suxuseuro\007\033]711;suxuseuro\007
 URxvt.keysym.M-C-2: command:\033]710;9x15bold\007\033]711;9x15bold\007
+Rxvt.depth: 24
+URxvt.depth: 24
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease                                                                    
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal
+
+URxvt*skipBuiltinGlyphs:    true
+URxvt*buffered: true
+URxvt*scrollstyle: plain
+URxvt*skipScroll:  true
+URxvt*scrollWithBuffer:       false 

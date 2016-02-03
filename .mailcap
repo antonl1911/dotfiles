@@ -1,3 +1,7 @@
 application/msword; antiword %s
-text/html; elinks -dump -dump-charset utf-8 -default-mime-type text/html %s; needsterminal; copiousoutput;
-application/x-pdf; pdftotext %s
+application/x-pdf; zathura %s
+text/html; w3m -I %{charset} -T text/html; copiousoutput;
+image/jpeg; feh %s 
+image/gif; feh %s 
+image/png; feh %s 
+

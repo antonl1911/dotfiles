@@ -7,6 +7,9 @@ require "lfs"
 -- Window class table
 window = {}
 
+-- Vertitabs custom replacement for Lousy tablist
+local vertitabs = require "vertitabs"
+
 -- List of active windows by window widget
 window.bywidget = setmetatable({}, { __mode = "k" })
 
@@ -25,9 +28,11 @@ function window.build()
         win    = widget{type="window"},
         ebox   = eventbox(),
         layout = vbox(),
+        tab_layout = hbox(),
+        paned  = widget{type="vpaned"},
         tabs   = notebook(),
         -- Tablist widget
-        tablist = lousy.widget.tablist(),
+        tablist = vertitabs(),
         -- Status bar widgets
         sbar = {
             layout = hbox(),
@@ -67,14 +72,19 @@ function window.build()
     }
 
     -- Assemble window
-    w.ebox.child = w.layout
+    w.ebox.child = w.paned
+    w.paned:pack1(w.layout)
     w.win.child = w.ebox
 
     -- Pack tablist
-    w.layout:pack(w.tablist.widget)
+    -- w.tab_layout:pack(w.tablist.widget, { expand = true, fill = true })
+    w.tab_layout:pack(w.tablist.widget)
 
     -- Pack notebook
-    w.layout:pack(w.tabs, { expand = true, fill = true })
+    w.tab_layout:pack(w.tabs, { expand = true, fill = true })
+
+    -- Pack tab_layout
+    w.layout:pack(w.tab_layout, { expand = true, fill = true })
 
     -- Pack left-aligned statusbar elements
     local l = w.sbar.l
@@ -169,10 +179,11 @@ window.init_funcs = {
     key_press_match = function (w)
         w.win:add_signal("key-press", function (_, mods, key)
             -- Match & exec a bind
-            local success, match = pcall(w.hit, w, mods, key)
-            if not success then
-                w:error("In bind call: " .. match)
-            elseif match then
+            local success, match = xpcall(
+                function () return w:hit(mods, key) end,
+                function (err) w:error(debug.traceback(err, 3)) end)
+
+            if success and match then
                 return true
             end
         end)
@@ -277,6 +288,12 @@ window.methods = {
     enter_cmd = function (w, cmd, opts)
         w:set_mode("command")
         w:set_input(cmd, opts)
+    end,
+
+    -- run command as if typed into the command line
+    run_cmd = function (w, cmd, opts)
+        w:enter_cmd(cmd, opts)
+        w:activate()
     end,
 
     -- insert a string into the command line at the current cursor position
@@ -658,7 +675,7 @@ window.methods = {
         if view then
             local js = string.match(uri, "^javascript:(.+)$")
             if js then
-                return view:eval_js(luakit.uri_decode(js), "(javascript-uri)")
+                return view:eval_js(luakit.uri_decode(js))
             end
             view.uri = uri
         else
@@ -772,6 +789,15 @@ window.methods = {
     goto_tab = function (w, n)
         if n and (n == -1 or n > 0) then
             return w.tabs:switch((n <= w.tabs:count() and n) or -1)
+        end
+    end,
+
+    -- For each tab, switches to that tab and calls the given function passing
+    -- it the view contained in the tab.
+    each_tab = function (w, fn)
+        for index = 1, w.tabs:count() do
+            w:goto_tab(index)
+            fn(w.tabs[index])
         end
     end,
 

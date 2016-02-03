@@ -1,8 +1,8 @@
 # Lines configured by zsh-newuser-install
-#export PATH=/opt/intel/composerxe-2011.0.084/compiler/lib/intel64:$PATH
 HISTFILE=~/.histfile
 HISTSIZE=1000
 SAVEHIST=1000
+set -o emacs
 #bindkey -e
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
@@ -12,7 +12,7 @@ autoload -Uz compinit promptinit colors
 compinit
 promptinit
 colors
-prompt gentoo
+prompt redhat
 # End of lines added by compinstall
 #PROMPT='%d%>:%{\e[0m%} ' # default prompt
 #PROMPT='[%n@%m:%c]%#' # default prompt
@@ -44,6 +44,9 @@ source ~/.shell_exports
 
 zstyle ':completion:*' menu select
 setopt completealiases
+setopt hist_ignore_all_dups
+setopt autocd
+setopt extendedglob
 # bind special keys according to readline configuration
 #eval "$(sed -n 's/^/bindkey /; s/: / /p' /etc/inputrc)"
 
@@ -118,4 +121,6 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     zle -N zle-line-init
     zle -N zle-line-finish
 fi
-fortune
+setopt noflowcontrol
+stty -ixon
+fortune | cowsay
