@@ -1,4 +1,3 @@
-call pathogen#infect()
 set nocompatible
 set number
 set ruler
@@ -6,10 +5,6 @@ set hlsearch
 set dictionary+=/usr/share/dict/words
 :au BufNewFile * silent! 0r  ~/.vim/templates/%:e.tpl
 let $PAGER=''
-let g:signify_vcs_list = [ 'git', 'svn' ]
-let g:vc_browse_cache_all = 1
-let g:startify_custom_header =
-      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
 set t_Co=256
 ":colo jellyx
 "colo solarized
@@ -32,13 +27,76 @@ map <C-n> :NERDTreeToggle<CR>
 :nnoremap <F5> :buffers<CR>:buffer<Space>
 set pastetoggle=<F2>
 set showmode
-filetype off
+
+
+
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+"=====================================================
+" Vundle settings
+"=====================================================
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+Plugin 'gmarik/Vundle.vim'		" let Vundle manage Vundle, required
+
+"---------=== Code/project navigation ===-------------
+Plugin 'scrooloose/nerdtree' 	    	" Project and file navigation
+"Plugin 'majutsushi/tagbar'          	" Class/module browser
+
+"------------------=== Other ===----------------------
+Plugin 'bling/vim-airline'   	    	" Lean & mean status/tabline for vim
+Plugin 'vim-airline/vim-airline-themes'  " Themes pack
+"Plugin 'fisadev/FixedTaskList.vim'  	" Pending tasks list
+"Plugin 'rosenfeld/conque-term'      	" Consoles as buffers
+Plugin 'tpope/vim-surround'	   	        " Parentheses, brackets, quotes, XML tags, and more
+
+"--------------=== Snippets support ===---------------
+"Plugin 'garbas/vim-snipmate'		    " Snippets manager
+"Plugin 'MarcWeber/vim-addon-mw-utils'	" dependencies #1
+"Plugin 'tomtom/tlib_vim'		        " dependencies #2
+"Plugin 'honza/vim-snippets'		        " snippets repo
+
+"---------------=== Languages support ===-------------
+" --- Python ---
+"Plugin 'klen/python-mode'	            " Python mode (docs, refactor, lints, highlighting, run and ipdb and more)
+"Plugin 'davidhalter/jedi-vim' 		    " Jedi-vim autocomplete plugin
+"Plugin 'mitsuhiko/vim-jinja'		    " Jinja support for vim
+Plugin 'mitsuhiko/vim-python-combined'  " Combined Python 2/3 for Vim
+
+Plugin 's3rvac/AutoFenc.git'            " Auto File Encoding plugin
+
+Plugin 'juneedahamed/vc.vim'            " Version control plugin
+Plugin 'altercation/vim-colors-solarized.git' " Solarized scheme
+Plugin 'thinca/vim-quickrun'            " Run commands easily
+Plugin 'mhinz/vim-signify'              " Show diff in style
+Plugin 'mhinz/vim-startify'             " Show fancy start screen
+
+" Clang integration
+if has('nvim')
+Plugin 'bbchung/Clamp'
+else
+Plugin 'bbchung/clighter8'
+endif
+
+Plugin 'easymotion/vim-easymotion' " Vim motion on speed!
+
+call vundle#end()            		" required
+filetype on
+filetype plugin on
+filetype plugin indent on
+
 syntax on
 filetype plugin indent on
 
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
 nmap <leader>t :set expandtab<CR>:retab<CR>
+
+let g:linuxsty_patterns = [ "/usr/src/", "/home/x/src/linux", "/home/x/src/ldd3" ]
+
 "
 " Shortcut to switch between win and linux style
 " nmae <leader>p :set shiftwidth=
@@ -72,7 +130,7 @@ command -nargs=0 -bar Update if &modified
 nnoremap <silent> <C-S> :<C-u>Update<CR>
 
 " virtual tabstops using spaces
-let my_tab=8
+let my_tab=4
 execute "set shiftwidth=".my_tab
 execute "set softtabstop=".my_tab
 " allow toggling between local and default mode
@@ -89,9 +147,12 @@ nmap <F10> mz:execute TabToggle()<CR>'z
 
 
 
-set tabstop=8 shiftwidth=8 softtabstop=8 expandtab
-set expandtab
+set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
+let g:signify_vcs_list = [ 'git', 'svn' ]
+let g:vc_browse_cache_all = 1
+let g:startify_custom_header =
+      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
 
 "=====================================================
 " Python-mode settings
