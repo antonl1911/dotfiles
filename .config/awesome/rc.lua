@@ -5,19 +5,12 @@ awful.rules = require("awful.rules")
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
-local assault = require('assault')
 -- Theme handling library
 local beautiful = require("beautiful")
 -- Notification library
 local naughty = require("naughty")
 local menubar = require("menubar")
 local vicious = require("vicious")
-myassault = assault({
-  critical_level = 0.15,
-  critical_color = "#ff0000",
-  normal_color = "#ff0000",
-  charging_color = "#00ff00"
-})
 naughty.config.presets.online = {
     bg = "#1f880e80",
     fg = "#ffffff",
@@ -141,7 +134,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
-beautiful.init("~/.config/awesome/themes/current/theme.lua")
+beautiful.init("/usr/share/awesome/themes/default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "urxvtc"
@@ -292,7 +285,7 @@ for s = 1, screen.count() do
     -- Widgets that are aligned to the right
     local right_layout = wibox.layout.fixed.horizontal()
  	right_layout:add(cpuwidget)
-	right_layout:add(myassault)
+-- 	right_layout:add(myassault)
 -- 	right_layout:add(thermalwidget)
 -- 	right_layout:add(fanwidget)
     if s == 1 then right_layout:add(wibox.widget.systray()) end
@@ -543,6 +536,4 @@ client.connect_signal("manage", function (c, startup)
     end
 end)
 
-client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
-client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
