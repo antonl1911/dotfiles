@@ -1,113 +1,139 @@
+" General settings
 set nocompatible
+set relativenumber
 set number
 set ruler
 set hlsearch
 set dictionary+=/usr/share/dict/words
-:au BufNewFile * silent! 0r  ~/.vim/templates/%:e.tpl
-let $PAGER=''
-set t_Co=256
-":colo jellyx
-"colo solarized
-colo xoria256
-
+set showmode
 set smarttab
 set smartindent
 set cursorline
-
-set ff=dos
 set switchbuf=usetab
-nnoremap <F8> :sbnext<CR>
+set t_Co=256
+set pastetoggle=<F2>
+set listchars=tab:▸\ ,eol:¬
+set wildmode=longest,list,full
+set wildmenu
+set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
+
+let $PAGER=''
+
+" Key mappings
+"nnoremap <F8> :sbnext<CR>
 nnoremap <F9> :QuickRun<CR>
-nnoremap <S-F8> :sbprevious<CR>
-nnoremap <F2> :set invpaste paste?<CR>
-nnoremap <C-Left> :tabprevious<CR>
-nnoremap <C-Right> :tabnext<CR>
+"nnoremap <S-F8> :sbprevious<CR>
+"nnoremap <C-Left> :tabprevious<CR>
+"nnoremap <C-Right> :tabnext<CR>
 map <C-n> :NERDTreeToggle<CR>
 ":inoremap <c-s> <Esc>:Update<CR>
-:nnoremap <F5> :buffers<CR>:buffer<Space>
-set pastetoggle=<F2>
-set showmode
+nnoremap <F5> :buffers<CR>:buffer<Space>
+" map creation of cscope db to F6
+nnoremap <silent> <F6> :!cscope -bR<CR>
+nnoremap <Tab> :bnext<CR>
+nnoremap <S-Tab> :bprevious<CR>
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+nmap <leader>t :set expandtab<CR>:retab<CR>
+" Window navigation
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
 
-
-
-set nocompatible              " be iMproved, required
 filetype off                  " required
 
-"=====================================================
-" Vundle settings
-"=====================================================
+" Plugins
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-Plugin 'gmarik/Vundle.vim'		" let Vundle manage Vundle, required
-
-"---------=== Code/project navigation ===-------------
-Plugin 'scrooloose/nerdtree' 	    	" Project and file navigation
-"Plugin 'majutsushi/tagbar'          	" Class/module browser
-
-"------------------=== Other ===----------------------
+Plugin 'gmarik/Vundle.vim'		        " let Vundle manage Vundle, required
 Plugin 'bling/vim-airline'   	    	" Lean & mean status/tabline for vim
-Plugin 'vim-airline/vim-airline-themes'  " Themes pack
-"Plugin 'fisadev/FixedTaskList.vim'  	" Pending tasks list
-"Plugin 'rosenfeld/conque-term'      	" Consoles as buffers
+Plugin 'vim-airline/vim-airline-themes' " Themes pack
+Plugin 'scrooloose/nerdtree' 	    	" Project and file navigation
 Plugin 'tpope/vim-surround'	   	        " Parentheses, brackets, quotes, XML tags, and more
-
-"--------------=== Snippets support ===---------------
-"Plugin 'garbas/vim-snipmate'		    " Snippets manager
-"Plugin 'MarcWeber/vim-addon-mw-utils'	" dependencies #1
-"Plugin 'tomtom/tlib_vim'		        " dependencies #2
-"Plugin 'honza/vim-snippets'		        " snippets repo
-
-"---------------=== Languages support ===-------------
-" --- Python ---
-"Plugin 'klen/python-mode'	            " Python mode (docs, refactor, lints, highlighting, run and ipdb and more)
-"Plugin 'davidhalter/jedi-vim' 		    " Jedi-vim autocomplete plugin
-"Plugin 'mitsuhiko/vim-jinja'		    " Jinja support for vim
-Plugin 'mitsuhiko/vim-python-combined'  " Combined Python 2/3 for Vim
-
+Plugin 'tpope/vim-fugitive.git'	   	    " a Git wrapper so awesome, it should be illegal
 Plugin 's3rvac/AutoFenc.git'            " Auto File Encoding plugin
-
-Plugin 'juneedahamed/vc.vim'            " Version control plugin
-Plugin 'altercation/vim-colors-solarized.git' " Solarized scheme
 Plugin 'thinca/vim-quickrun'            " Run commands easily
 Plugin 'mhinz/vim-signify'              " Show diff in style
 Plugin 'mhinz/vim-startify'             " Show fancy start screen
+Plugin 'vim-syntastic/syntastic.git'    " Syntastic is a syntax checking plugin for Vim created by Martin Grenfell
+Plugin 'easymotion/vim-easymotion'      " Vim motion on speed!
+Plugin 'vivien/vim-linux-coding-style'  " Linux kernel coding style
+Plugin 'aperezdc/vim-template.git'  	" Simple Vim templates plugin
+Plugin 'flazz/vim-colorschemes'         " One pack to rule them all
+Plugin 'ctrlpvim/ctrlp.vim'         	" Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
+Plugin 'mileszs/ack.vim'                " Silver search
+Plugin 'takac/vim-hardtime'             " Useful for learning
+"------------------=== Other ===----------------------
+"Plugin 'fisadev/FixedTaskList.vim'  	" Pending tasks list
+"Plugin 'rosenfeld/conque-term'      	" Consoles as buffers
+"Plugin 'majutsushi/tagbar'          	" Class/module browser
+"Plugin 'juneedahamed/vc.vim'            " Version control plugin
+call vundle#end()            		    " required
 
-" Clang integration
-if has('nvim')
-Plugin 'bbchung/Clamp'
-else
-Plugin 'bbchung/clighter8'
-endif
-
-Plugin 'easymotion/vim-easymotion' " Vim motion on speed!
-
-call vundle#end()            		" required
 filetype on
 filetype plugin on
 filetype plugin indent on
-
 syntax on
-filetype plugin indent on
 
-" Shortcut to rapidly toggle `set list`
-nmap <leader>l :set list!<CR>
-nmap <leader>t :set expandtab<CR>:retab<CR>
-
+" Plugin settings
+colo xoria256
 let g:linuxsty_patterns = [ "/usr/src/", "/home/x/src/linux", "/home/x/src/ldd3" ]
 
-"
-" Shortcut to switch between win and linux style
-" nmae <leader>p :set shiftwidth=
-" " Use the same symbols as TextMate for tabstops and EOLs
-set listchars=tab:▸\ ,eol:¬
+let g:signify_vcs_list = [ 'git', 'svn' ]
+"let g:vc_browse_cache_all = 1
+let g:startify_custom_header =
+      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
 
-"turn on syntax highlighting
-set wildmode=longest,list,full
-set wildmenu
-"jump to last cursor position when opening a file
-""dont do it when writing a commit log entry
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_auto_loc_list = 0
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 1
+
+let g:syntastic_error_symbol = 'x'
+let g:syntastic_style_error_symbol = '?'
+let g:syntastic_warning_symbol = '!'
+let g:syntastic_style_warning_symbol = '^'
+let g:syntastic_cpp_compiler = 'clang++'
+let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+let g:syntastic_cpp_check_header = 1
+
+highlight link SyntasticErrorSign SignColumn
+highlight link SyntasticWarningSign SignColumn
+highlight link SyntasticStyleErrorSign SignColumn
+highlight link SyntasticStyleWarningSign SignColumn
+
+" Setup some default ignores
+let g:ctrlp_custom_ignore = {
+   \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
+   \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
+\}
+
+" Use the nearest .git directory as the cwd
+" This makes a lot of sense if you are working on a project that is in
+" version
+" control. It also supports works with .svn, .hg, .bzr.
+let g:ctrlp_working_path_mode = 'r'
+
+" Use a leader instead of the actual named binding
+nmap <leader>p :CtrlP<cr>
+
+" Easy bindings for its various modes
+nmap <leader>bb :CtrlPBuffer<cr>
+nmap <leader>bm :CtrlPMixed<cr>
+nmap <leader>bs :CtrlPMRU<cr>
+
+" Misc
+" jump to last cursor position when opening a file
+" dont do it when writing a commit log entry
 autocmd BufReadPost * call SetCursorPosition()
 function! SetCursorPosition()
         if &filetype !~ 'svn\|commit\c'
@@ -129,70 +155,8 @@ command -nargs=0 -bar Update if &modified
                            \|endif
 nnoremap <silent> <C-S> :<C-u>Update<CR>
 
-" virtual tabstops using spaces
-let my_tab=4
-execute "set shiftwidth=".my_tab
-execute "set softtabstop=".my_tab
-" allow toggling between local and default mode
-function! TabToggle()
-  if &shiftwidth == g:my_tab
-    set shiftwidth=4
-    set softtabstop=4
-  else
-    execute "set shiftwidth=".g:my_tab
-    execute "set softtabstop=".g:my_tab
-  endif
-endfunction
-nmap <F10> mz:execute TabToggle()<CR>'z
-
-
-
-set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-
-let g:signify_vcs_list = [ 'git', 'svn' ]
-let g:vc_browse_cache_all = 1
-let g:startify_custom_header =
-      \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
-
-"=====================================================
-" Python-mode settings
-"=====================================================
-" отключаем автокомплит по коду (у нас вместо него используется jedi-vim)
-let g:pymode_rope = 0
-let g:pymode_rope_completion = 0
-let g:pymode_rope_complete_on_dot = 0
-" проверка кода
-let g:pymode_lint = 1
-let g:pymode_lint_checker = "pyflakes,pep8"
-let g:pymode_lint_ignore="E501,W601,C0110"
-" провека кода после сохранения
-let g:pymode_lint_write = 0
-
-" поддержка virtualenv
-let g:pymode_virtualenv = 1
-
-" установка breakpoints
-let g:pymode_breakpoint = 1
-let g:pymode_breakpoint_key = '<leader>b'
-
-" подстветка синтаксиса
-let g:pymode_syntax = 1
-let g:pymode_syntax_all = 1
-let g:pymode_syntax_indent_errors = g:pymode_syntax_all
-let g:pymode_syntax_space_errors = g:pymode_syntax_all
-
-" отключить autofold по коду
-let g:pymode_folding = 0
-
-
-"=====================================================
-" Languages support
-"=====================================================
-" --- Python ---
-autocmd FileType python set completeopt-=preview " раскомментируйте, в случае, если не надо, чтобы jedi-vim показывал документацию по методу/классу
-autocmd FileType python setlocal expandtab shiftwidth=4 tabstop=8
-\ formatoptions+=croq softtabstop=4 smartindent
-\ cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-autocmd FileType pyrex setlocal expandtab shiftwidth=4 tabstop=8 softtabstop=4 smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class,with
-" Disable choose first function/method at autocomplete
-let g:jedi#popup_select_first = 0
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+let g:hardtime_showmsg = 1
+let g:hardtime_default_on = 1
