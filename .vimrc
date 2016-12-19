@@ -1,6 +1,7 @@
 " General settings
 set nocompatible
 set relativenumber
+set encoding=utf-8
 set number
 set ruler
 set hlsearch
@@ -16,7 +17,9 @@ set listchars=tab:▸\ ,eol:¬
 set wildmode=longest,list,full
 set wildmenu
 set tabstop=4 shiftwidth=4 softtabstop=4 expandtab
-
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
 let $PAGER=''
 
 " Key mappings
@@ -58,7 +61,8 @@ Plugin 's3rvac/AutoFenc.git'            " Auto File Encoding plugin
 Plugin 'thinca/vim-quickrun'            " Run commands easily
 Plugin 'mhinz/vim-signify'              " Show diff in style
 Plugin 'mhinz/vim-startify'             " Show fancy start screen
-Plugin 'vim-syntastic/syntastic.git'    " Syntastic is a syntax checking plugin for Vim created by Martin Grenfell
+"Plugin 'vim-syntastic/syntastic.git'   " Syntastic is a syntax checking plugin for Vim created by Martin Grenfell
+Plugin 'neomake/neomake'                " Async checker
 Plugin 'easymotion/vim-easymotion'      " Vim motion on speed!
 Plugin 'vivien/vim-linux-coding-style'  " Linux kernel coding style
 Plugin 'aperezdc/vim-template.git'  	" Simple Vim templates plugin
@@ -66,6 +70,12 @@ Plugin 'flazz/vim-colorschemes'         " One pack to rule them all
 Plugin 'ctrlpvim/ctrlp.vim'         	" Full path fuzzy file, buffer, mru, tag, ... finder for Vim.
 Plugin 'mileszs/ack.vim'                " Silver search
 Plugin 'takac/vim-hardtime'             " Useful for learning
+Plugin 'tmhedberg/SimpylFold'           " Simple folding
+Plugin 'vim-scripts/indentpython.vim'   " Python indentation
+Plugin 'Valloric/YouCompleteMe'         " Powerful completion
+Plugin 'Shougo/deoplete.nvim'           " Another completion plugin
+
+
 "------------------=== Other ===----------------------
 "Plugin 'fisadev/FixedTaskList.vim'  	" Pending tasks list
 "Plugin 'rosenfeld/conque-term'      	" Consoles as buffers
@@ -78,8 +88,8 @@ filetype plugin on
 filetype plugin indent on
 syntax on
 
-" Plugin settings
 colo xoria256
+" Plugin settings
 let g:linuxsty_patterns = [ "/usr/src/", "/home/x/src/linux", "/home/x/src/ldd3" ]
 
 let g:signify_vcs_list = [ 'git', 'svn' ]
@@ -88,28 +98,28 @@ let g:startify_custom_header =
       \ map(split(system('fortune | cowsay'), '\n'), '"   ". v:val') + ['','']
 
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_loc_list_height = 5
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 1
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_loc_list_height = 5
+"let g:syntastic_auto_loc_list = 0
+"let g:syntastic_check_on_open = 0
+"let g:syntastic_check_on_wq = 1
+"
+"let g:syntastic_error_symbol = 'x'
+"let g:syntastic_style_error_symbol = '?'
+"let g:syntastic_warning_symbol = '!'
+"let g:syntastic_style_warning_symbol = '^'
+"let g:syntastic_cpp_compiler = 'clang++'
+"let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
+"let g:syntastic_cpp_check_header = 1
 
-let g:syntastic_error_symbol = 'x'
-let g:syntastic_style_error_symbol = '?'
-let g:syntastic_warning_symbol = '!'
-let g:syntastic_style_warning_symbol = '^'
-let g:syntastic_cpp_compiler = 'clang++'
-let g:syntastic_cpp_compiler_options = ' -std=c++11 -stdlib=libc++'
-let g:syntastic_cpp_check_header = 1
-
-highlight link SyntasticErrorSign SignColumn
-highlight link SyntasticWarningSign SignColumn
-highlight link SyntasticStyleErrorSign SignColumn
-highlight link SyntasticStyleWarningSign SignColumn
+"highlight link SyntasticErrorSign SignColumn
+"highlight link SyntasticWarningSign SignColumn
+"highlight link SyntasticStyleErrorSign SignColumn
+"highlight link SyntasticStyleWarningSign SignColumn
 
 " Setup some default ignores
 let g:ctrlp_custom_ignore = {
@@ -135,6 +145,7 @@ nmap <leader>bs :CtrlPMRU<cr>
 " jump to last cursor position when opening a file
 " dont do it when writing a commit log entry
 autocmd BufReadPost * call SetCursorPosition()
+autocmd! BufWritePost * Neomake
 function! SetCursorPosition()
         if &filetype !~ 'svn\|commit\c'
                 if line("'\"") > 0 && line("'\"") <= line("$")
@@ -160,3 +171,8 @@ if executable('ag')
 endif
 let g:hardtime_showmsg = 1
 let g:hardtime_default_on = 1
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py'
+let g:ycm_extra_conf_vim_data   = ['&filetype']
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
