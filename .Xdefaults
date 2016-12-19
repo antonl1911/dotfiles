@@ -1,4 +1,4 @@
-urxvt*termName:  xterm-256color
+urxvt*termName:  rxvt-unicode-256color
 urxvt*scrollBar:         false
 urxvt*secondaryScroll:    true
 urxvt*cursorBlink:        true
@@ -8,9 +8,6 @@ XTerm*faceSize: 10
 ! Extensions
 urxvt*perl-lib:        /usr/lib/urxvt/perl/
 urxvt*perl-ext-common: default,searchable-scrollback,font-size,url-select,clipboard
-URxvt.keysym.M-c:   perl:clipboard:copy
-URxvt.keysym.M-v:   perl:clipboard:paste
-URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
 urxvt*urlLauncher:     /usr/bin/firefox
 URxvt.url-select.launcher: /usr/bin/xdg-open
 URxvt.url-select.underline: true
@@ -25,17 +22,23 @@ Xft.hintstyle: hintfull
 Xft.hinting: 1
 Xft.antialias: 1
 Xft.rgba: rgb
-URxvt.keysym.M-C-1: command:\033]710;suxuseuro\007\033]711;suxuseuro\007
-URxvt.keysym.M-C-2: command:\033]710;9x15bold\007\033]711;9x15bold\007
 Rxvt.depth: 24
 URxvt.depth: 24
-URxvt.keysym.C-Up:     perl:font-size:increase
-URxvt.keysym.C-Down:   perl:font-size:decrease                                                                    
-URxvt.keysym.C-S-Up:   perl:font-size:incglobal
-URxvt.keysym.C-S-Down: perl:font-size:decglobal
 
 URxvt*skipBuiltinGlyphs:    true
 URxvt*buffered: true
 URxvt*scrollstyle: plain
 URxvt*skipScroll:  true
 URxvt*scrollWithBuffer:       false 
+
+URxvt.keysym.KP_Home: \033[1~
+URxvt.keysym.KP_End:  \033[4~
+URxvt.keysym.M-c:   perl:clipboard:copy
+URxvt.keysym.M-v:   perl:clipboard:paste
+URxvt.keysym.M-C-v: perl:clipboard:paste_escaped
+URxvt.keysym.M-C-1: command:\033]710;suxuseuro\007\033]711;suxuseuro\007
+URxvt.keysym.M-C-2: command:\033]710;9x15bold\007\033]711;9x15bold\007
+URxvt.keysym.C-Up:     perl:font-size:increase
+URxvt.keysym.C-Down:   perl:font-size:decrease
+URxvt.keysym.C-S-Up:   perl:font-size:incglobal
+URxvt.keysym.C-S-Down: perl:font-size:decglobal
