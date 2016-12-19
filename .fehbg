@@ -1,2 +1,2 @@
 #!/bin/sh
- feh --bg-fill --recursive --randomize --no-fehbg /usr/share/backgrounds
+feh --bg-fill --recursive --randomize --no-fehbg /usr/share/backgrounds
