@@ -14,7 +14,7 @@ prompt redhat
 #PROMPT='%d%>:%{\e[0m%} ' # default prompt
 #PROMPT='[%n@%m:%c]%#' # default prompt
 #RPROMPT='[%* on %D]' # prompt for right side of screen
-PS1="%{$fg[green]%}%n%{$reset_color%}@%{$fg[blue]%}%m %{$fg[yellow]%}%~ %{$reset_color%}%% "
+PS1="%{$fg[green]%}%n@%m %{$fg[cyan]%}%~ %{$reset_color%}%% "
 
 unsetopt equals
 
